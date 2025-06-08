@@ -1,0 +1,43 @@
+syntax = "proto3";
+package media;
+
+import "google/protobuf/empty.proto";
+
+service MediaService {
+  rpc UploadContent(stream MediaChunk) returns (UploadStatus);
+  rpc StreamContent(ContentRequest) returns (stream MediaChunk);
+  rpc GetStatistics(ContentRequest) returns (Statistics);
+  rpc ListContents(google.protobuf.Empty) returns (ContentsList);
+}
+
+message MediaChunk {
+  int32 content_id = 1;
+  bytes data      = 2;
+  string filename = 3;
+}
+
+message UploadStatus {
+  bool success     = 1;
+  int32 content_id = 2;
+  string message   = 3;
+}
+
+message ContentRequest {
+  int32 content_id = 1;
+}
+
+message Statistics {
+  int32 content_id = 1;
+  int32 view_count = 2;
+}
+
+message ContentInfo {
+  int32 content_id = 1;
+  string title     = 2;
+  string path      = 3;
+  string uploaded_at = 4;
+}
+
+message ContentsList {
+  repeated ContentInfo items = 1;
+}
